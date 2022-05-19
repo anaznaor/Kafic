@@ -1,0 +1,73 @@
+﻿<!DOCTYPE html>
+<html lang="hr_HR" xml:lang="hr_HR">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Kafić</title>
+    <!--<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/lib/font-awesome/css/all.css" />-->
+    <link rel="stylesheet" href="~/lib/bootstrap/css/bootstrap.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
+
+    @RenderSection("styles", required: false)
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-md bg-dark navbar-dark">
+        <a class="navbar-brand" asp-action="Index" asp-controller="Home" style="font-family:Courier New, Courier, monospace;"> KAFIĆ   </a>
+
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+            <span class="navbar-toggler-icon">
+            </span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="collapsibleNavbar">
+
+            <vc:navigation>
+
+            </vc:navigation>
+
+
+
+        </div>
+    </nav>
+
+    <main>
+        @*<div>
+            @if (TempData[Constants.Message] != null)
+            {
+                bool error = false;
+                var obj = TempData[Constants.ErrorOccurred];
+                if (obj != null)
+                {
+                    error = (bool)obj;
+                }
+                <div class="alert @(error ? "alert-danger" : "alert-success")">@TempData[Constants.Message]</div>
+            }
+
+        </div>*@
+        @RenderBody()
+    </main>
+    <hr />
+
+
+    <footer>
+        <p class="text-center" style="font-family:Courier New, Courier, monospace;">&copy; 2022 - IS, ZPR, FER</p>
+    </footer>
+
+
+
+    <script src="~/lib/jquery/jquery.js"></script>
+    <script src="~/lib/bootstrap/js/bootstrap.js"></script>
+    <script asp-src-include="~/lib/jquery-validate/**/jquery.validate.min.js"></script>
+    <script asp-src-include="~/lib/jquery-validation-unobtrusive/**/*.min.js"></script>
+
+    <script src="https://kit.fontawesome.com/5c6fbe9a35.js" crossorigin="anonymous"></script>
+
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/js/validation.js" asp-append-version="true"></script>
+
+
+    @RenderSection("scripts", required: false)
+</body>
+</html>
