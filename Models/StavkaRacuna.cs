@@ -11,7 +11,7 @@ namespace Kafic.Models
         public decimal JedCijena { get; set; }
         public float Iznos { get; set; }
 
-        public virtual Pice IdPiceNavigation { get; set; }
-        public virtual Racun IdRacunNavigation { get; set; }
+        public virtual Pice Pice { get; set; }
+        public virtual Racun Racun { get; set; }
     }
 }
