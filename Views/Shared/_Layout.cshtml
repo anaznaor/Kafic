@@ -4,70 +4,62 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - Kafić</title>
-    <!--<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/lib/font-awesome/css/all.css" />-->
-    <link rel="stylesheet" href="~/lib/bootstrap/css/bootstrap.css" />
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
     <link rel="stylesheet" href="~/css/site.css" />
 
     @RenderSection("styles", required: false)
 </head>
-
 <body>
-    <nav class="navbar navbar-expand-md bg-dark navbar-dark">
-        <a class="navbar-brand" asp-action="Index" asp-controller="Home" style="font-family:Courier New, Courier, monospace;"> KAFIĆ   </a>
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+            <div class="container">
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">JANA</a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
+                    <ul class="navbar-nav flex-grow-1">
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                        </li>
 
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
-            <span class="navbar-toggler-icon">
-            </span>
-        </button>
 
-        <div class="collapse navbar-collapse" id="collapsibleNavbar">
+                        <li class="nav-item">
+                            <a class="nav-link text-dark @(ViewBag.Controller =="Racun" ? "active": "")" asp-action="Index" asp-controller="Racun">
+                                Računi (MD)
+                            </a>
+                        </li>
 
-            <vc:navigation>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark @(ViewBag.Controller =="Korisnik" ? "active": "")" asp-action="Index" asp-controller="Korisnik">
+                                Korisnici
+                            </a>
+                        </li>
 
-            </vc:navigation>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
 
-
-
+    <footer class="border-top footer text-muted">
+        <div class="container">
+            &copy; 2022 - KAF - Ana Znaor & Bruno Šegvić
         </div>
-    </nav>
-
-    <main>
-        @*<div>
-            @if (TempData[Constants.Message] != null)
-            {
-                bool error = false;
-                var obj = TempData[Constants.ErrorOccurred];
-                if (obj != null)
-                {
-                    error = (bool)obj;
-                }
-                <div class="alert @(error ? "alert-danger" : "alert-success")">@TempData[Constants.Message]</div>
-            }
-
-        </div>*@
-        @RenderBody()
-    </main>
-    <hr />
-
-
-    <footer>
-        <p class="text-center" style="font-family:Courier New, Courier, monospace;">&copy; 2022 - IS, ZPR, FER</p>
     </footer>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
 
-
-
-    <script src="~/lib/jquery/jquery.js"></script>
-    <script src="~/lib/bootstrap/js/bootstrap.js"></script>
-    <script asp-src-include="~/lib/jquery-validate/**/jquery.validate.min.js"></script>
-    <script asp-src-include="~/lib/jquery-validation-unobtrusive/**/*.min.js"></script>
 
     <script src="https://kit.fontawesome.com/5c6fbe9a35.js" crossorigin="anonymous"></script>
 
-    <script src="~/js/site.js" asp-append-version="true"></script>
-    <script src="~/js/validation.js" asp-append-version="true"></script>
-
-
-    @RenderSection("scripts", required: false)
+    @RenderSection("Scripts", required: false)
 </body>
 </html>

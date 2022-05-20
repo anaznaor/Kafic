@@ -19,16 +19,40 @@ build_property._RazorSourceGeneratorDebug =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/znaor/OneDrive/Desktop/Kafic/Views/Konobar/Index.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcS29ub2JhclxJbmRleC5jc2h0bWw=
+[C:/Users/znaor/OneDrive/Desktop/Kafic/Views/Korisnik/Create.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcS29yaXNuaWtcQ3JlYXRlLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/znaor/OneDrive/Desktop/Kafic/Views/Shared/Components/Navigation/Default.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXENvbXBvbmVudHNcTmF2aWdhdGlvblxEZWZhdWx0LmNzaHRtbA==
+[C:/Users/znaor/OneDrive/Desktop/Kafic/Views/Korisnik/Delete.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcS29yaXNuaWtcRGVsZXRlLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/znaor/OneDrive/Desktop/Kafic/Views/Korisnik/Details.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcS29yaXNuaWtcRGV0YWlscy5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/znaor/OneDrive/Desktop/Kafic/Views/Korisnik/Edit.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcS29yaXNuaWtcRWRpdC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/znaor/OneDrive/Desktop/Kafic/Views/Korisnik/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcS29yaXNuaWtcSW5kZXguY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/znaor/OneDrive/Desktop/Kafic/Views/Shared/Error.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXEVycm9yLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/znaor/OneDrive/Desktop/Kafic/Views/Shared/ShowMessage.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXFNob3dNZXNzYWdlLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/znaor/OneDrive/Desktop/Kafic/Views/Shared/_Layout.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9MYXlvdXQuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/znaor/OneDrive/Desktop/Kafic/Views/Shared/_ValidationScriptsPartial.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9WYWxpZGF0aW9uU2NyaXB0c1BhcnRpYWwuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/znaor/OneDrive/Desktop/Kafic/Views/_ViewImports.cshtml]

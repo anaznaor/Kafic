@@ -231,7 +231,7 @@ namespace Kafic.Models
 
                 entity.Property(e => e.UkupanIznos).HasColumnName("ukupanIznos");
 
-                entity.HasOne(d => d.IdKorisnikNavigation)
+                entity.HasOne(d => d.Korisnik)
                     .WithMany(p => p.Racuns)
                     .HasForeignKey(d => d.IdKorisnik)
                     .OnDelete(DeleteBehavior.ClientSetNull)
@@ -293,13 +293,13 @@ namespace Kafic.Models
 
                 entity.Property(e => e.Kolicina).HasColumnName("kolicina");
 
-                entity.HasOne(d => d.IdPiceNavigation)
+                entity.HasOne(d => d.Pice)
                     .WithMany(p => p.StavkaRacunas)
                     .HasForeignKey(d => d.IdPice)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("fkStavkaRacunaPice");
 
-                entity.HasOne(d => d.IdRacunNavigation)
+                entity.HasOne(d => d.Racun)
                     .WithMany(p => p.StavkaRacunas)
                     .HasForeignKey(d => d.IdRacun)
                     .OnDelete(DeleteBehavior.ClientSetNull)

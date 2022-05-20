@@ -15,7 +15,7 @@ namespace Kafic.Models
         public DateTime Datum { get; set; }
         public float UkupanIznos { get; set; }
 
-        public virtual Korisnik IdKorisnikNavigation { get; set; }
+        public virtual Korisnik Korisnik { get; set; }
         public virtual ICollection<StavkaRacuna> StavkaRacunas { get; set; }
     }
 }
