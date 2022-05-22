@@ -1,0 +1,48 @@
+﻿@model Kafic.Models.Racun
+
+@{
+    ViewData["Title"] = "Delete";
+}
+
+<div class="jumbotron">
+
+    <h3>Jeste li sigurni da želite izbrisati podatak o računu?</h3>
+    <div>
+       
+        <dl class="dl-horizontal">
+             <dt>
+                @Html.DisplayNameFor(model => model.IdRacun)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.IdRacun)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.IdKorisnik)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.IdKorisnik)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.Datum)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Datum)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.UkupanIznos)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.UkupanIznos)
+            </dd>
+        </dl>
+
+        <form asp-action="Delete">
+            <input type="hidden" asp-for="IdRacun" />
+            <input type="submit" value="Izbriši" class="btn btn-danger" /> 
+            <a  class="btn btn-info" asp-action="Index">Natrag na listu</a>
+        </form>
+    </div>
+
+
+
+</div>

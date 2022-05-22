@@ -1,0 +1,141 @@
+﻿@model Kafic.ViewModels.RacunViewModel
+
+@{
+    ViewData["Title"] = "Racun";
+}
+
+<partial name="PreviousNext" model="@Model" />
+
+
+
+@if (Model.idPrethodnogRacuna != null)
+{
+    <div class="row justify-content-sm-center">
+        <div class="col-sm-2">
+            Prethodni racun:
+
+        </div>
+        <div class="col-sm-6">
+            <a asp-action="Show" asp-route-id="@Model.idPrethodnogRacuna" target="_blank">@Model.NazivPrethodnogRacuna</a>
+
+        </div>
+
+    </div>
+}
+
+
+<div style="float:right;" class="col-sm-1 text-left">
+    <a asp-action="Index"
+       asp-route-page="@ViewBag.Page"
+       asp-route-sort="@ViewBag.Sort"
+       asp-route-ascending="@ViewBag.Ascending"
+       class="btn btn-primary" title="Povratak na popis racuna">
+
+        <i class="icon-fixed-width ">Povratak</i>
+    </a>
+
+
+
+</div>
+
+<div class="row justify-content-sm-center">
+    <div class="col-sm-2">
+        ID racuna: @Model.IdRacun
+    </div>
+    <div class="col-sm-2">
+        Korisnik: @Model.Korisnik
+    </div>
+    <div class="col-sm-2">
+        Datum: @Model.Datum
+    </div>
+    <div class="col-sm-2">
+        Ukupan iznos: @Model.UkupanIznos
+    </div>
+    <div class="col-sm-1 text-right">
+        <a asp-action="Edit"
+           asp-route-id="@Model.IdRacun"
+           asp-route-page="@ViewBag.Page"
+           asp-route-sort="@ViewBag.Sort"
+           asp-route-ascending="@ViewBag.Ascending"
+           class="btn btn-sm" title="Ažuriraj">
+
+            <i class="fas fa-edit"></i>
+        </a>
+    </div>
+
+    <form asp-action="Delete" method="POST"
+          asp-route-page="@ViewBag.Page"
+          asp-route-sort="@ViewBag.Sort"
+          asp-route-ascending="@ViewBag.Ascending">
+        <input type="hidden" name="IdKorisnik" value="@Model.IdRacun" />
+        <button type="submit" class="btn btn-sm btn-danger delete" title="Obriši">
+            <i class="fas fa-trash-alt"></i>
+        </button>
+    </form>
+    <div class="col-sm-1 text-left">
+        <a asp-action="Index"
+           asp-route-page="@ViewBag.Page"
+           asp-route-sort="@ViewBag.Sort"
+           asp-route-ascending="@ViewBag.Ascending"
+           class="btn btn-sm btn-primary" title="Povratak na popis racuna">
+
+            <i class="fas fa-undo-alt"></i>
+        </a>
+
+
+    </div>
+
+
+<h6>Popis stavki racuna za odabrani racun</h6>
+<table style="margin-left:15px;" class="table table-bordered" >
+    <thead>
+        <tr>
+                @{ 
+                    string[] nazivi = { "Pice", "Kolicina", "JedCijena", "Iznos"};
+                    for(int i=0; i < nazivi.Length; i++)
+                    {
+                        <th style="width:15%;">
+                            @nazivi[i]
+                        </th>
+                    }
+                }
+            <th style="width:15%;"></th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach (var stavka in Model.Stavke)
+        {
+
+        <tr>
+
+            <td style="width:25%;" class="text-left col-sm-2">
+                @stavka.Pice
+            </td>
+            <td style="width:35%;" class="text-left col-sm-4">
+                @stavka.Kolicina
+            </td>
+            <td style="width:20%;" class="text-left col-sm-4">
+                @stavka.JedCijena
+            </td>
+            <td style="width:10%;" class="text-left col-sm-4">
+                @stavka.Iznos
+           
+
+
+
+        </tr>
+        }
+
+    </tbody>
+
+</table>
+@section styles{
+
+}
+
+
+@section scripts{
+
+
+}

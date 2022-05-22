@@ -1,7 +1,170 @@
-﻿@model IEnumerable<Kafic.Models.Korisnik>
+﻿@model Kafic.ViewModels.KorisniciViewModel
 
 @{
-    Layout = null;
+    ViewData["Title"] = "popis korisnika";
+}
+
+<h2>Popis korisnika</h2>
+<pager page-info="@Model.PagingInfo" page-title="Unesi željenu stranicu" page-action="Index" class="float-right">
+
+
+</pager>
+
+<a asp-action="Create">
+    Unos novog korisnika
+
+</a>
+
+<table class="table table-sm table-striped table-hover table-bordered" id="tableKorisnici">
+    <thead>
+        <tr>
+            <th class="text-center">
+                <a asp-route-sort="1"
+                   asp-route-page="@Model.PagingInfo.CurrentPage"
+                   asp-route-ascending="@(Model.PagingInfo.Sort==1 ? !Model.PagingInfo.Ascending : true)">
+                    Ime
+                </a>
+            </th>
+
+
+            <th class="text-center">
+                <a asp-route-sort="2"
+                   asp-route-page="@Model.PagingInfo.CurrentPage"
+                   asp-route-ascending="@(Model.PagingInfo.Sort==2 ? !Model.PagingInfo.Ascending : true)">
+                    Prezime
+                </a>
+            </th>
+            
+            <th class="text-center">
+                <a asp-route-sort="2"
+                   asp-route-page="@Model.PagingInfo.CurrentPage"
+                   asp-route-ascending="@(Model.PagingInfo.Sort==2 ? !Model.PagingInfo.Ascending : true)">
+                    Spol
+                </a>
+            </th>
+            <th class="text-center">
+                <a asp-route-sort="2"
+                   asp-route-page="@Model.PagingInfo.CurrentPage"
+                   asp-route-ascending="@(Model.PagingInfo.Sort==2 ? !Model.PagingInfo.Ascending : true)">
+                    OIB
+                </a>
+            </th>
+            <th class="text-center">
+                <a asp-route-sort="2"
+                   asp-route-page="@Model.PagingInfo.CurrentPage"
+                   asp-route-ascending="@(Model.PagingInfo.Sort==2 ? !Model.PagingInfo.Ascending : true)">
+                    Datum rođ.
+                </a>
+            </th>
+            <th class="text-center">
+                <a asp-route-sort="2"
+                   asp-route-page="@Model.PagingInfo.CurrentPage"
+                   asp-route-ascending="@(Model.PagingInfo.Sort==2 ? !Model.PagingInfo.Ascending : true)">
+                    Adresa
+                </a>
+            </th>
+            <th class="text-center">
+                <a asp-route-sort="2"
+                   asp-route-page="@Model.PagingInfo.CurrentPage"
+                   asp-route-ascending="@(Model.PagingInfo.Sort==2 ? !Model.PagingInfo.Ascending : true)">
+                    Poštanski broj
+                </a>
+            </th>
+            <th class="text-center">
+                <a asp-route-sort="2"
+                   asp-route-page="@Model.PagingInfo.CurrentPage"
+                   asp-route-ascending="@(Model.PagingInfo.Sort==2 ? !Model.PagingInfo.Ascending : true)">
+                    Mjesto
+                </a>
+            </th>
+            <th class="text-center">
+                <a asp-route-sort="2"
+                   asp-route-page="@Model.PagingInfo.CurrentPage"
+                   asp-route-ascending="@(Model.PagingInfo.Sort==2 ? !Model.PagingInfo.Ascending : true)">
+                    Država
+                </a>
+            </th>
+            <th class="text-center">
+                <a asp-route-sort="2"
+                   asp-route-page="@Model.PagingInfo.CurrentPage"
+                   asp-route-ascending="@(Model.PagingInfo.Sort==2 ? !Model.PagingInfo.Ascending : true)">
+                    Korisničko ime
+                </a>
+            </th>
+            <th class="text-center">
+                <a asp-route-sort="2"
+                   asp-route-page="@Model.PagingInfo.CurrentPage"
+                   asp-route-ascending="@(Model.PagingInfo.Sort==2 ? !Model.PagingInfo.Ascending : true)">
+                    Lozinka
+                </a>
+            </th>
+        </tr>
+
+
+    </thead>
+
+    <tbody>
+        @foreach (var korisnik in Model.Korisnici)
+        {
+            <tr>
+                <td class="text-center">@korisnik.Ime</td>
+                <td class="text-center">@korisnik.Prezime</td>
+                <td class="text-center">@korisnik.Spol</td>
+                <td class="text-center">@korisnik.Oib</td>
+                <td class="text-center">@korisnik.DatumRodenja</td>
+                <td class="text-center">@korisnik.Adresa</td>
+                <td class="text-center">@korisnik.PostanskiBroj</td>
+                <td class="text-center">@korisnik.Mjesto</td>
+                <td class="text-center">@korisnik.Drzava</td>
+                <td class="text-center">@korisnik.KorisnickoIme</td>
+                <td class="text-center">@korisnik.Lozinka</td>
+                <td class="btn-group">
+                    <a asp-action="Details" asp-route-id="@korisnik.IdKorisnik">Detalji </a>      
+                    <a asp-action="Edit"
+                       asp-route-id="@korisnik.IdKorisnik"
+                       asp-route-page="@Model.PagingInfo.CurrentPage"
+                       asp-route-sort="@Model.PagingInfo.Sort"
+                       asp-route-ascending="@Model.PagingInfo.Ascending"
+                       class="btn btn-sm" title="Ažuriraj">
+
+                        <i class="fas fa-edit"></i>
+                    </a>
+
+                    <form asp-action="Delete" method="post"
+                          asp-route-page="@Model.PagingInfo.CurrentPage"
+                          asp-route-sort="@Model.PagingInfo.Sort"
+                          asp-route-ascending="@Model.PagingInfo.Ascending">
+                        <input type="hidden" name="IdKorisnik" value="@korisnik.IdKorisnik" />
+                        <button type="submit" class="btn btn-sm btn-danger delete" title="Obriši">
+                            <i class="fas fa-trash-alt"></i>
+                        </button>
+                    </form>
+                </td>
+
+            </tr>
+        }
+
+    </tbody>
+
+</table>
+@section styles{
+
+}
+
+
+@section scripts{
+
+
+} 
+
+
+
+
+
+@*@model IEnumerable<Kafic.ViewModels.KorisnikViewModel>
+
+@{
+    ViewData["Title"] = "Popis korisnika";
 }
 
 <!DOCTYPE html>
@@ -100,4 +263,4 @@
     </tbody>
 </table>
 </body>
-</html>
+</html>*@

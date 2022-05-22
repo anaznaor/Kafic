@@ -1,0 +1,67 @@
+﻿@model IEnumerable<Kafic.Models.StavkaRacuna>
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+</head>
+<body>
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.IdRacun)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IdPice)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Kolicina)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.JedCijena)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Iznos)
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.IdRacun)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IdPice)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Kolicina)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.JedCijena)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Iznos)
+            </td>
+            
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.IdRacun" asp-route-id="@item.IdPice">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.IdRacun" asp-route-id="@item.IdPice">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.IdRacun" asp-route-id="@item.IdPice">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+</body>
+</html>

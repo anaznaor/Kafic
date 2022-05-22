@@ -39,6 +39,38 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcS29yaXNuaWtcSW5kZXguY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
+[C:/Users/znaor/OneDrive/Desktop/Kafic/Views/Racun/Create.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUmFjdW5cQ3JlYXRlLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/znaor/OneDrive/Desktop/Kafic/Views/Racun/Delete.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUmFjdW5cRGVsZXRlLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/znaor/OneDrive/Desktop/Kafic/Views/Racun/Edit.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUmFjdW5cRWRpdC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/znaor/OneDrive/Desktop/Kafic/Views/Racun/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUmFjdW5cSW5kZXguY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/znaor/OneDrive/Desktop/Kafic/Views/Racun/NovaStavkaTemplate.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUmFjdW5cTm92YVN0YXZrYVRlbXBsYXRlLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/znaor/OneDrive/Desktop/Kafic/Views/Racun/PreviousNext.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUmFjdW5cUHJldmlvdXNOZXh0LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/znaor/OneDrive/Desktop/Kafic/Views/Racun/Show.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUmFjdW5cU2hvdy5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/znaor/OneDrive/Desktop/Kafic/Views/Racun/Stavke.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUmFjdW5cU3RhdmtlLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/znaor/OneDrive/Desktop/Kafic/Views/Shared/Error.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXEVycm9yLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
@@ -53,6 +85,26 @@ build_metadata.AdditionalFiles.CssScope =
 
 [C:/Users/znaor/OneDrive/Desktop/Kafic/Views/Shared/_ValidationScriptsPartial.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9WYWxpZGF0aW9uU2NyaXB0c1BhcnRpYWwuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/znaor/OneDrive/Desktop/Kafic/Views/StavkaRacuna/Create.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU3RhdmthUmFjdW5hXENyZWF0ZS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/znaor/OneDrive/Desktop/Kafic/Views/StavkaRacuna/Delete.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU3RhdmthUmFjdW5hXERlbGV0ZS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/znaor/OneDrive/Desktop/Kafic/Views/StavkaRacuna/Details.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU3RhdmthUmFjdW5hXERldGFpbHMuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/znaor/OneDrive/Desktop/Kafic/Views/StavkaRacuna/Edit.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU3RhdmthUmFjdW5hXEVkaXQuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/znaor/OneDrive/Desktop/Kafic/Views/StavkaRacuna/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU3RhdmthUmFjdW5hXEluZGV4LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/znaor/OneDrive/Desktop/Kafic/Views/_ViewImports.cshtml]

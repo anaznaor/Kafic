@@ -149,7 +149,22 @@ namespace Kafic.Controllers
             }
         }
 
+        public async Task<IActionResult> Details(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
 
+            var korisnik = await ctx.Korisnik
+                .FirstOrDefaultAsync(m => m.IdKorisnik == id);
+            if (korisnik == null)
+            {
+                return NotFound();
+            }
+
+            return View(korisnik);
+        }
         public IActionResult Index(int page = 1, int sort = 1, bool ascending = true)
         {
             int pageSize = appSettings.PageSize;
