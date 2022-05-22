@@ -1,12 +1,12 @@
-﻿@model IEnumerable<StavkaRacuna>
+﻿@model IEnumerable<StavkaRacunaViewModel>
 
-
+<h6>Popis stavki racuna: </h6>
 
 <table class="table table-sm table-striped table-hover table-bordered" id="tablegodine">
     <thead>
         <tr>
             @{
-                string[] nazivi = { "ID pića", "Kolicina", "JedCijena", "Iznos" };
+                string[] nazivi = { "Piće", "Kolicina", "JedCijena", "Iznos" };
                 for (int i = 0; i < nazivi.Length; i++)
                 {
                     <th>
@@ -29,26 +29,26 @@
 
         <tr>
 
-            <td class="text-left col-sm-auto">
-                <input type="hidden" name="Stavke.Index" value="@stavka.IdPice" />
-                <input type="hidden" name="Stavke[@stavka.IdRacun, @stavka.IdPice].IdRacun" value="@stavka.IdRacun" />
-                <input type="hidden" name="Stavke[@stavka.IdRacun, @stavka.IdPice].IdPice" value="@stavka.IdPice" />
-                <input type="hidden" name="Stavke[@stavka.IdRacun, @stavka.IdPice].Kolicina" value="@stavka.Kolicina" />
-                <input type="hidden" name="Stavke[@stavka.IdRacun, @stavka.IdPice].JedCijena" value="@stavka.JedCijena" />
-                <input type="hidden" name="Stavke[@stavka.IdRacun, @stavka.IdPice].Iznos" value="@stavka.Iznos" />
-                @stavka.IdPice
+            <td class="text-left col-sm-4">
+                <input type="hidden" name="Stavke.Index" value="@stavka.Pice" />
+                <input type="hidden" name="Stavke[@stavka.Pice].IdRacun" value="@stavka.IdRacun" />
+                <input type="hidden" name="Stavke[@stavka.Pice].Kolicina" value="@stavka.Kolicina" />
+                <input type="hidden" name="Stavke[@stavka.Pice].JedCijena" value="@stavka.JedCijena" />
+                <input type="hidden" name="Stavke[@stavka.Pice].Iznos" value="@stavka.Iznos" />
+                @stavka.Pice
             </td>
 
-            <td class="text-left col-sm-auto">
-                <input name="Stavke[@stavka.IdRacun, @stavka.IdPice].Kolicina" class="form-control" value="@stavka.Kolicina" />
+            <td class="text-left col-sm-1">
+                <input name="Stavke[@stavka.Pice].Kolicina" class="form-control" value="@stavka.Kolicina" />
+
+            </td>
+
+            <td class="text-left col-sm-2">
+                <input name="Stavke[@stavka.Pice].JedCijena" class="form-control" value="@stavka.JedCijena" />
 
             </td>
             <td class="text-left col-sm-auto">
-                <input name="Stavke[@stavka.IdRacun, @stavka.IdPice].JedCijena" class="form-control" value="@stavka.JedCijena" />
-
-            </td>
-            <td class="text-left col-sm-auto">
-                <input name="Stavke[@stavka.IdRacun, @stavka.IdPice].Iznos" class="form-control" value="@stavka.Iznos" />
+                <input name="Stavke[@stavka.Pice].Iznos" class="form-control" value="@stavka.Iznos" />
 
             </td>
             <td>
@@ -59,6 +59,22 @@
         </tr>
         }
         <tr>
+            <td>
+                <input id="IdRacun" type="hidden"  readonly="readonly" />
+                <input id="IdRacun" type="text" />
+            </td>
+            <td class="text-center col-sm-1">
+                <input id="Pice" type="text" />
+            </td>
+            <td class="text-center col-sm-1">
+                <input id="Kolicina" type="text" />
+            </td>
+            <td class="text-center col-sm-1">
+                <input id="JedCijena" type="text" />
+            </td>
+            <td class="text-center col-sm-1">
+                <input id="Iznos" type="text" />
+            </td>
             <td class="text-left" colspan="3">
                 <button id="stavka-dodaj" class="btn btn-sm btn-secondary" title="Dodaj"><i class="fas fa-plus"></i></button>
             </td>

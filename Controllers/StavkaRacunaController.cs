@@ -1,357 +1,229 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Kafic;
-using Kafic.Models;
-using Kafic.ViewModels;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
+using Kafic.Extensions;
+using Kafic.Extensions.Selectors;
+using Kafic.Models;
+using Kafic.ViewModels;
+using System;
+using System.Linq;
+using System.Text.Json;
+using System.Threading.Tasks;
 
-namespace DjecjiVrticProjekt.Controllers
+namespace Kafic.Controllers
 {
+    /// <summary>
+    /// Kontroler za Kontakt.
+    /// </summary>
     public class StavkaRacunaController : Controller
     {
-        private readonly KaficContext _context;
+        private readonly KaficContext ctx;
 
-        public StavkaRacunaController(KaficContext context)
+        private readonly AppSettings appSettings;
+        public StavkaRacunaController(KaficContext ctx, IOptionsSnapshot<AppSettings> options)
         {
-            _context = context;
+            this.ctx = ctx;
+            appSettings = options.Value;
         }
 
-        // GET: Dijete
-        public async Task<IActionResult> Index()
+        [HttpGet]
+        public async Task<IActionResult> Create()
         {
-            var kaficContext = _context.StavkaRacuna.Include(d => d.Racun);
-            return View(await kaficContext.ToListAsync());
-        }
-
-        public IActionResult MasterDetail(int page = 1, int sort = 1, bool ascending = true)
-        {
-            var stavke = _context.StavkaRacuna
-                .Include(z => z.Racun)
-         
-                .AsNoTracking()
-                .Select(m => new StavkaRacunaViewModel
-                {
-                    IdRacun = m.IdRacun,
-                    Pice = m.Pice.Naziv,
-                    Kolicina = m.Kolicina,
-                    JedCijena = m.JedCijena,
-                    Iznos = m.Iznos
-                })
-                .ToList();
-            var racun = _context.Racun
-                .AsNoTracking()
-                .Select(m => new RacunViewModel
-                {
-                    IdRacun = m.IdRacun,
-                    Korisnik = m.Korisnik.KorisnickoIme,
-                    Datum = m.Datum,
-                    UkupanIznos = m.UkupanIznos
-                });
-            var childrenCount = stavke.Count();
-            var parentsCount = 1;
-            //int pagesize = appData.PageSize;
-            
-
-
-            var model = new StavkeRacunaViewModel
-            {
-                StavkeRacuna = stavke
-               
-            };
-
-
-
-            return View(model);
-        }
-
-        public PartialViewResult Row(int idR, int idP)
-        {
-            var stavka = _context.StavkaRacuna
-                             .Where(m => m.IdRacun == idR && m.IdPice == idP)
-                              .Select(m => new StavkaRacunaViewModel
-                              {
-                                  IdRacun = m.IdRacun,
-                                  Pice = m.Pice.Naziv,
-                                  Kolicina = m.Kolicina,
-                                  JedCijena = m.JedCijena,
-                                  Iznos = m.Iznos
-                              })
-                             .SingleOrDefault();
-            if (stavka != null)
-            {
-                return PartialView(stavka);
-            }
-            else
-            {
-                //vratiti prazan sadržaj?
-                return PartialView("ErrorMessageRow", $"Neispravan id djeteta: {idR}, {idP}");
-            }
-        }
-
-        public IActionResult EditPartial(int idR, int idP)
-        {
-            ViewData["IdRacun"] = new SelectList(_context.Racun, "IdRacun");
-            var stavka = _context.StavkaRacuna
-                             .AsNoTracking()
-                             .Where(m => m.IdRacun == idR && m.IdPice == idP)
-                             .SingleOrDefault();
-            if (stavka != null)
-            {
-
-                return PartialView(stavka);
-            }
-            else
-            {
-                return NotFound($"Neispravan ključ stavke: {idR}, {idP}");
-            }
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public IActionResult EditPartial(StavkaRacuna stavka)
-        {
-
-            if (stavka == null)
-            {
-                return NotFound("Nema poslanih podataka");
-            }
-            bool checkId = _context.StavkaRacuna.Any(m => m.IdRacun == stavka.IdRacun && m.IdPice == stavka.IdPice);
-            if (!checkId)
-            {
-                return NotFound($"Neispravan id stavke: {stavka.IdRacun}, {stavka.IdPice}");
-            }
-            ViewData["IdRacun"] = new SelectList(_context.Racun, "IdRacun");
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    TempData[Constants.Message] = $"Stavka uspjesno azurirana.";
-                    TempData[Constants.ErrorOccurred] = false;
-                    _context.Update(stavka);
-                    _context.SaveChanges();
-
-                    return StatusCode(302, Url.Action(nameof(Row), new { idR = stavka.IdRacun, idP = stavka.IdPice }));
-
-                }
-                catch (Exception exc)
-                {
-
-                    return PartialView(stavka);
-                }
-            }
-            else
-            {
-                return PartialView(stavka);
-            }
-        }
-
-
-        public IActionResult EditPartialRacun(int id)
-        {
-           
-            var racun = _context.Racun
-                             .AsNoTracking()
-                             .Where(m => m.IdRacun == id)
-                             .SingleOrDefault();
-            if (racun != null)
-            {
-
-                return PartialView(racun);
-            }
-            else
-            {
-                return NotFound($"Neispravan id racuna: {id}");
-            }
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public IActionResult EditPartialRoditelj(Racun racun)
-        {
-
-            if (racun == null)
-            {
-                return NotFound("Nema poslanih podataka");
-            }
-            bool checkId = _context.Racun.Any(m => m.IdRacun == racun.IdRacun);
-            if (!checkId)
-            {
-                return NotFound($"Neispravan id racuna: {racun.IdRacun}");
-            }
-           
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(racun);
-                    _context.SaveChanges();
-
-                    return StatusCode(302, Url.Action(nameof(Row), new { id = racun.IdRacun }));
-
-                }
-                catch (Exception exc)
-                {
-
-                    return PartialView(racun);
-                }
-            }
-            else
-            {
-                return PartialView(racun);
-            }
-        }
-
-
-        // GET: Dijete/Details/5
-        public async Task<IActionResult> Details(int? idR, int? idP)
-        {
-            if (idR == null || idP == null)
-            {
-                return NotFound();
-            }
-
-            var stavka = await _context.StavkaRacuna
-                .Include(d => d.Racun)
-                .FirstOrDefaultAsync(m => m.IdRacun == idR && m.IdPice == idP);
-            if (stavka == null)
-            {
-                return NotFound();
-            }
-
-            return View(stavka);
-        }
-
-        private void PrepareDropDownList()
-        {
-            var pica = _context.Pice
-                .Where(d => d.Naziv != "...")
-                .OrderBy(d => d.Naziv)
-                .Select(d => new { d.IdPice, d.Naziv })
-                .ToList();
-            var gd2 = _context.Pice
-                .Where(d => d.Naziv == "...")
-                .Select(d => new { d.IdPice, d.Naziv })
-                .FirstOrDefault();
-
-            if (gd2 != null)
-            {
-                pica.Insert(0, gd2);
-            }
-            ViewBag.Korisnici = new SelectList(pica, nameof(Pice.IdPice), nameof(Pice.Naziv));
-
-
-        }
-
-        public IActionResult Create()
-        {
-            ViewData["IdRacun"] = new SelectList(_context.Racun, "IdRacun");
-            PrepareDropDownList();
+            await PrepareDropDownLists();
             return View();
         }
 
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("IdRacun,IdPice,Kolicina,JedCijena,Iznos")] StavkaRacuna stavka)
+        private async Task PrepareDropDownLists()
         {
-            if (ModelState.IsValid)
-            {
-                _context.Add(stavka);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            ViewData["IdRacun"] = new SelectList(_context.Racun, "IdRacun", stavka.IdRacun.ToString());
-            PrepareDropDownList();
-            return View(stavka);
-        }
-
-
-        public async Task<IActionResult> Edit(int? idR, int? idP)
-        {
-            if (idR == null || idP == null)
-            {
-                return NotFound();
-            }
-
-            var stavka = await _context.StavkaRacuna.FindAsync(idR, idP);
-            if (stavka == null)
-            {
-                return NotFound();
-            }
-            ViewData["IdRoditelj"] = new SelectList(_context.Racun, "IdRacun", stavka.IdRacun.ToString());
-            return View(stavka);
+            var pica= await ctx.Pice
+                                 .OrderBy(d => d.IdPice)
+                                 .Select(d => new { d.IdPice, d.Naziv })
+                                 .ToListAsync();
+            ViewBag.Pica = new SelectList(pica, nameof(Pice.IdPice), nameof(Pice.Naziv));
+            
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int idR, int idP, [Bind("IdRacun,IdPice,Kolicina,JedCijena,Iznos")] StavkaRacuna stavka)
+        public async Task<IActionResult> Create(StavkaRacuna stavka)
         {
-            if (idR != stavka.IdRacun || idP != stavka.IdPice)
-            {
-                return NotFound();
-            }
-
             if (ModelState.IsValid)
             {
                 try
                 {
-                    _context.Update(stavka);
-                    await _context.SaveChangesAsync();
+                    ctx.Add(stavka);
+                    await ctx.SaveChangesAsync();
+
+                    TempData[Constants.Message] = $"Stavka {stavka.Pice} uspješno dodan. Id kontakta = {stavka.Pice}";
+                    TempData[Constants.ErrorOccurred] = false;
+
+                    return RedirectToAction(nameof(Index));
                 }
-                catch (DbUpdateConcurrencyException)
+                catch (Exception exc)
                 {
-                    if (!StavkaExists(stavka.IdRacun, stavka.IdPice))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
+                    ModelState.AddModelError(string.Empty, exc.CompleteExceptionMessage());
+                    await PrepareDropDownLists();
+                    return View(stavka);
                 }
-                return RedirectToAction(nameof(Index));
             }
-            ViewData["IdRoditelj"] = new SelectList(_context.Racun, "IdRacun", stavka.IdRacun.ToString());
-            return View(stavka);
+            else
+            {
+                await PrepareDropDownLists();
+                return View(stavka);
+            }
+
         }
 
-        // GET: Dijete/Delete/5
-        public async Task<IActionResult> Delete(int? idR, int? idP)
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Delete(int IdPice, int page = 1, int sort = 1, bool ascending = true)
         {
-            if (idR == null || idP == null)
+            var stavka = await ctx.StavkaRacuna.FindAsync(IdPice);
+            if (stavka != null)
             {
-                return NotFound();
+                try
+                {
+                    string naziv = stavka.Pice.Naziv;
+                    ctx.Remove(stavka);
+                    await ctx.SaveChangesAsync();
+                    TempData[Constants.Message] = $"Stavka {naziv} obrisana.";
+                    TempData[Constants.ErrorOccurred] = false;
+                }
+                catch (Exception exc)
+                {
+                    TempData[Constants.Message] = "Pogreška prilikom brisanja kontakta: " + exc.CompleteExceptionMessage();
+                    TempData[Constants.ErrorOccurred] = true;
+                }
             }
+            else
+            {
+                TempData[Constants.Message] = $"Ne postoji stavka {IdPice}";
+                TempData[Constants.ErrorOccurred] = true;
+            }
+            return RedirectToAction(nameof(Index), new { page, sort, ascending });
+        }
 
-            var stavka = await _context.StavkaRacuna
-                .Include(d => d.Racun)
-                .FirstOrDefaultAsync(m => m.IdRacun == idR && m.IdPice == idP);
+        [HttpGet]
+        public async Task<IActionResult> Edit(int id, int page = 1, int sort = 1, bool ascending = true)
+        {
+            var stavka = await ctx.StavkaRacuna.FindAsync(id);
             if (stavka == null)
             {
-                return NotFound();
+                return NotFound("Ne postoji stavka s ID-om: " + id);
+            }
+            else
+            {
+                StavkaRacuna model = new StavkaRacuna
+                {
+                    IdRacun = stavka.IdRacun,
+                    IdPice = id,
+                    Kolicina = stavka.Kolicina,
+                    JedCijena = stavka.JedCijena,
+                    Iznos = stavka.Iznos
+                };
+
+                ViewBag.Page = page;
+                ViewBag.Sort = sort;
+                ViewBag.Ascending = ascending;
+                await PrepareDropDownLists();
+                return View(stavka);
+            }
+        }
+
+        [HttpPost, ActionName("Edit")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Update(int id, int page = 1, int sort = 1, bool ascending = true)
+        {
+            try
+            {
+                StavkaRacuna stavka = await ctx.StavkaRacuna.FindAsync(id);
+                if (stavka == null)
+                {
+                    return NotFound($"Nema navedene {id} stavka");
+                }
+                ViewBag.Page = page;
+                ViewBag.Sort = sort;
+                ViewBag.Ascending = ascending;
+                bool ok = await TryUpdateModelAsync<StavkaRacuna>(stavka, "", d => d.IdRacun, d => d.IdPice, d => d.Kolicina, d => d.JedCijena, d => d.Iznos);
+                if (ok)
+                {
+                    try
+                    {
+                        TempData[Constants.Message] = $"Kontakt {stavka.Pice.Naziv} uspješno ažuriran.";
+                        TempData[Constants.ErrorOccurred] = false;
+                        await ctx.SaveChangesAsync();
+                        return RedirectToAction(nameof(Index), new { page, sort, ascending });
+                    }
+                    catch (Exception exc)
+                    {
+                        ModelState.AddModelError(string.Empty, exc.CompleteExceptionMessage());
+                        await PrepareDropDownLists();
+                        return View(stavka);
+                    }
+                }
+                else
+                {
+                    ModelState.AddModelError(string.Empty, "Podatke o planu nabave nije moguće povezati s forme.");
+                    await PrepareDropDownLists();
+                    return View(stavka);
+                }
+
+            }
+            catch (Exception exc)
+            {
+                TempData[Constants.Message] = exc.CompleteExceptionMessage();
+                TempData[Constants.ErrorOccurred] = true;
+                return RedirectToAction(nameof(Edit), new { id, page, sort, ascending });
+            }
+        }
+
+
+        public async Task<IActionResult> Index(int page = 1, int sort = 1, bool ascending = true)
+        {
+            int pagesize = appSettings.PageSize;
+
+            var query = ctx.StavkaRacuna
+                           .AsNoTracking();
+            int count = await query.CountAsync();
+
+            var pagingInfo = new PagingInfo
+            {
+                CurrentPage = page,
+                Sort = sort,
+                Ascending = ascending,
+                ItemsPerPage = pagesize,
+                TotalItems = count
+            };
+            if (page < 1 || page > pagingInfo.TotalPages)
+            {
+                return RedirectToAction(nameof(Index), new { page = pagingInfo.TotalPages, sort, ascending });
             }
 
-            return View(stavka);
-        }
+            query = query.ApplySort(sort, ascending);
 
-        // POST: Dijete/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int idR, int idP)
-        {
-            var stavka = await _context.StavkaRacuna.FindAsync(idR, idP);
-            _context.StavkaRacuna.Remove(stavka);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
+            var stavke = await query
+                                   .Select(m => new StavkaRacunaViewModel
+                                   {
+                                       IdRacun = m.IdRacun,
+                                       Pice = m.Pice.Naziv,
+                                       Kolicina = m.Kolicina,
+                                       JedCijena = m.JedCijena,
+                                       Iznos = m.Iznos
+                                   })
+                                   .Skip((page - 1) * pagesize)
+                                   .Take(pagesize)
+                                   .ToListAsync();
 
-        private bool StavkaExists(int idR, int idP)
-        {
-            return _context.StavkaRacuna.Any(e => e.IdRacun == idR && e.IdPice == idP);
+            var model = new StavkeRacunaViewModel
+            {
+                StavkeRacuna = stavke,
+                PagingInfo = pagingInfo
+            };
+
+
+            return View(model);
         }
     }
 }
