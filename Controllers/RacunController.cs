@@ -115,72 +115,177 @@ namespace Kafic.Controllers
 
         public IActionResult Edit(int id, int position, int page = 1, int sort = 1, bool ascending = true)
         {
-            var racun = ctx.Racun.AsNoTracking()
-                .Where(d => d.IdRacun == id)
-                .FirstOrDefault();
-            if (racun == null)
-            {
-                return NotFound($"Nema navedenog {id} racuna");
-            }
-            else
-            {
-                ViewBag.Page = page;
-                ViewBag.Sort = sort;
-                ViewBag.Ascending = ascending;
-                PrepareDropDownList();
-                return View(racun);
-            }
+            //var racun = ctx.Racun.AsNoTracking()
+            //    .Where(d => d.IdRacun == id)
+            //    .FirstOrDefault();
+            //if (racun == null)
+            //{
+            //    return NotFound($"Nema navedenog {id} racuna");
+            //}
+            //else
+            //{
+            //    ViewBag.Page = page;
+            //    ViewBag.Sort = sort;
+            //    ViewBag.Ascending = ascending;
+            //    PrepareDropDownList();
+            //    return View(racun);
+            //}
+            return Show(id, position, page, sort, ascending, viewName: nameof(Edit));
         }
 
 
         [HttpPost, ActionName("Edit")]
-        public async Task<IActionResult> Update(int id, int position, int page = 1, int sort = 1, bool ascending = true)
+        public IActionResult Edit(RacunViewModel model, int position, int page = 1, int sort = 1, bool ascending = true)
         {
-            try
+            ViewBag.Page = page;
+            ViewBag.Sort = sort;
+            ViewBag.Ascending = ascending;
+            ViewBag.Position = position;
+            if (ModelState.IsValid)
             {
-                Racun racun = await ctx.Racun.FindAsync(id);
+                var racun = ctx.Racun
+                                        .Include(d => d.StavkaRacunas)
+                                        .Where(d => d.IdRacun == model.IdRacun)
+                                        //.Select(d => new KorisnikViewModel { })
+                                        .FirstOrDefault();
+                //učitavanje kontakata
+                var stavke = ctx.StavkaRacuna
+                     .Where(s => s.IdRacun == racun.IdRacun)
+                     .OrderBy(s => s.IdRacun)
+                     .OrderBy(s => s.IdPice)
+                     .Select(s => new StavkaRacunaViewModel
+                     {
+                         IdRacun = s.IdRacun,
+                         Pice = s.Pice.Naziv,
+                         Kolicina = s.Kolicina,
+                         JedCijena = s.JedCijena,
+                         Iznos = s.Iznos
+                     })
+                     .ToList();
+                //plan.Stavke = stavkePlanaNabave;
+                model.Stavke = stavke;
+
                 if (racun == null)
                 {
-                    return NotFound($"Nema navedenog {id} racuna");
-                }
-                ViewBag.Page = page;
-                ViewBag.Sort = sort;
-                ViewBag.Position = position;
-                ViewBag.Ascending = ascending;
-                bool ok = await TryUpdateModelAsync<Racun>(racun, "", d => d.IdRacun, d => d.IdKorisnik, d => d.Datum, d => d.UkupanIznos);
-                if (ok)
-                {
-                    try
-                    {
-                        TempData[Constants.Message] = $"Racun {racun.IdRacun} uspješno ažuriran.";
-                        TempData[Constants.ErrorOccurred] = false;
-                        await ctx.SaveChangesAsync();
-                        return RedirectToAction(nameof(Index), new { page, sort, ascending });
-                    }
-                    catch (Exception exc)
-                    {
-                        ModelState.AddModelError(string.Empty, exc.CompleteExceptionMessage());
-                        PrepareDropDownList();
-                        return View(racun);
-                    }
-                }
-                else
-                {
-                    ModelState.AddModelError(string.Empty, "Podatke o racunu nije moguce povezati s forme.");
-                    PrepareDropDownList();
-                    return View(racun);
+                    return NotFound("Ne postoji racun s id-om: " + model.IdRacun);
                 }
 
+
+                SetPreviousAndNext(position, sort, ascending);
+
+                racun.IdKorisnik = model.idKorisnik;
+                racun.Datum = model.Datum;
+                racun.UkupanIznos = model.UkupanIznos;
+
+                try
+                {
+                    List<string> idStavke = model.Stavke
+                               .Where(s => s.IdRacun > 0 && s.Pice != null)
+                                .Select(s => s.Pice)
+                               .ToList();
+
+                    var zaBrisanje = racun.StavkaRacunas.Where(s => !idStavke.Contains(s.Pice.Naziv));
+                    ctx.RemoveRange(zaBrisanje);
+
+
+
+                    foreach (var stavka in model.Stavke)
+                    {
+                        //ažuriraj postojeće i dodaj nove
+                        StavkaRacuna novastavka; // potpuno nova ili dohvaćena ona koju treba izmijeniti
+                        if (stavka.IdRacun > 0)
+                        {
+                            novastavka = racun.StavkaRacunas.First(s => s.IdRacun == stavka.IdRacun && s.Pice.Naziv.Equals(stavka.Pice));
+                        }
+                        else
+                        {
+                            novastavka = new StavkaRacuna();
+                            racun.StavkaRacunas.Add(novastavka);
+                        }
+                        novastavka.IdPice = ctx.Pice
+                            .Where(s => s.Naziv == stavka.Pice)
+                            .Select(s => s.IdPice)
+                            .FirstOrDefault();
+                        novastavka.Kolicina = stavka.Kolicina;
+                        novastavka.JedCijena = stavka.JedCijena;
+                        novastavka.Iznos = stavka.Iznos;
+                    }
+
+
+                    ctx.SaveChanges();
+
+                    TempData[Constants.Message] = $"Racun {racun.IdRacun} uspješno ažuriran.";
+                    TempData[Constants.ErrorOccurred] = false;
+                    PrepareDropDownList();
+                    return RedirectToAction(nameof(Show), new
+                    {
+                        id = racun.IdRacun,
+                        position,
+
+                        page,
+                        sort,
+                        ascending
+                    });
+                }
+                catch (Exception exc)
+                {
+                    ModelState.AddModelError(string.Empty, exc.CompleteExceptionMessage());
+                    return View(model);
+                }
             }
-            catch (Exception exc)
+            else
             {
-                TempData[Constants.Message] = exc.CompleteExceptionMessage();
-                TempData[Constants.ErrorOccurred] = true;
-                return RedirectToAction(nameof(Edit), new { id, page, sort, ascending });
+                SetPreviousAndNext(position, sort, ascending);
+                return View(model);
             }
         }
 
+        //[HttpPost, ActionName("Edit")]
+        //public async Task<IActionResult> Update( int id, int position, int page = 1, int sort = 1, bool ascending = true)
+        //{
+        //    try
+        //    {
+        //        Racun racun = await ctx.Racun.FindAsync(id);
+        //        if (racun == null)
+        //        {
+        //            return NotFound($"Nema navedenog {id} racuna");
+        //        }
+        //        ViewBag.Page = page;
+        //        ViewBag.Sort = sort;
+        //        ViewBag.Position = position;
+        //        ViewBag.Ascending = ascending;
+        //        bool ok = await TryUpdateModelAsync<Racun>(racun, "", d => d.IdRacun, d => d.IdKorisnik, d => d.Datum, d => d.UkupanIznos);
+        //        if (ok)
+        //        {
+        //            try
+        //            {
+        //                TempData[Constants.Message] = $"Racun {racun.IdRacun} uspješno ažuriran.";
+        //                TempData[Constants.ErrorOccurred] = false;
+        //                await ctx.SaveChangesAsync();
+        //                return RedirectToAction(nameof(Index), new { page, sort, ascending });
+        //            }
+        //            catch (Exception exc)
+        //            {
+        //                ModelState.AddModelError(string.Empty, exc.CompleteExceptionMessage());
+        //                PrepareDropDownList();
+        //                return View(racun);
+        //            }
+        //        }
+        //        else
+        //        {
+        //            ModelState.AddModelError(string.Empty, "Podatke o racunu nije moguce povezati s forme.");
+        //            PrepareDropDownList();
+        //            return View(racun);
+        //        }
 
+        //    }
+        //    catch (Exception exc)
+        //    {
+        //        TempData[Constants.Message] = exc.CompleteExceptionMessage();
+        //        TempData[Constants.ErrorOccurred] = true;
+        //        return RedirectToAction(nameof(Edit), new { id, page, sort, ascending });
+        //    }
+        //}
 
 
 
@@ -286,6 +391,7 @@ namespace Kafic.Controllers
                     })
                     .ToList();
                 racun.Stavke = stavkeRacuna;
+                PrepareDropDownList();
                 return View(viewName, racun);
 
             }
