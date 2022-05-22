@@ -12,14 +12,14 @@ using Kafic.ViewModels;
 using Kafic.Extensions.Selectors;
 using Kafic;
 
-namespace JANA.Controllers
+namespace Kafic.Controllers
 {
-    public class PlanNabaveController : Controller
+    public class RacunController : Controller
     {
         private readonly KaficContext ctx;
         private readonly AppSettings appSettings;
 
-        public PlanNabaveController(KaficContext ctx, IOptionsSnapshot<AppSettings> optionsSnapshot)
+        public RacunController(KaficContext ctx, IOptionsSnapshot<AppSettings> optionsSnapshot)
         {
             this.ctx = ctx;
             appSettings = optionsSnapshot.Value;
@@ -47,7 +47,7 @@ namespace JANA.Controllers
             {
                 korisnici.Insert(0, gd2);
             }
-            ViewBag.Narucitelji = new SelectList(korisnici, nameof(Korisnik.IdKorisnik), nameof(Korisnik.KorisnickoIme));
+            ViewBag.Korisnici = new SelectList(korisnici, nameof(Korisnik.IdKorisnik), nameof(Korisnik.KorisnickoIme));
 
 
         }
@@ -97,10 +97,10 @@ namespace JANA.Controllers
             {
                 try
                 {
-                    int naziv = racun.IdRacun;
+                    int id = racun.IdRacun;
                     ctx.Remove(racun);
                     ctx.SaveChanges();
-                    TempData[Constants.Message] = $"Racun {racun.IdRacun} uspjesno obrisan.";
+                    TempData[Constants.Message] = $"Racun {id} uspjesno obrisan.";
                     TempData[Constants.ErrorOccurred] = false;
                 }
                 catch (Exception exc)
@@ -113,7 +113,7 @@ namespace JANA.Controllers
         }
 
 
-        public IActionResult Edit(int id, int page = 1, int sort = 1, bool ascending = true)
+        public IActionResult Edit(int id, int position, int page = 1, int sort = 1, bool ascending = true)
         {
             var racun = ctx.Racun.AsNoTracking()
                 .Where(d => d.IdRacun == id)
@@ -130,12 +130,11 @@ namespace JANA.Controllers
                 PrepareDropDownList();
                 return View(racun);
             }
-
         }
 
 
         [HttpPost, ActionName("Edit")]
-        public async Task<IActionResult> Update(int id, int page = 1, int sort = 1, bool ascending = true)
+        public async Task<IActionResult> Update(int id, int position, int page = 1, int sort = 1, bool ascending = true)
         {
             try
             {
@@ -146,6 +145,7 @@ namespace JANA.Controllers
                 }
                 ViewBag.Page = page;
                 ViewBag.Sort = sort;
+                ViewBag.Position = position;
                 ViewBag.Ascending = ascending;
                 bool ok = await TryUpdateModelAsync<Racun>(racun, "", d => d.IdRacun, d => d.IdKorisnik, d => d.Datum, d => d.UkupanIznos);
                 if (ok)
@@ -213,6 +213,7 @@ namespace JANA.Controllers
                 {
                     IdRacun = d.IdRacun,
                     idKorisnik = d.IdKorisnik,
+                    Korisnik = d.Korisnik.KorisnickoIme,
                     Datum = d.Datum,
                     UkupanIznos = d.UkupanIznos
                 })

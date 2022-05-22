@@ -1,0 +1,55 @@
+﻿@model Racun
+
+@{
+    ViewBag.Title = "Ažuriraj račun";
+}
+
+
+<form asp-route-page="@ViewBag.Page"
+      asp-route-sort="@ViewBag.Sort"
+      asp-route-ascending="@ViewBag.Ascending"
+      method="post">
+    <div asp-validation-summary="All"></div>
+    <div class="form-group">
+            <label asp-for="IdKorisnik">Korisnik</label>
+            <div><span asp-validation-for="IdKorisnik" class="text-danger"></span></div>
+            <select asp-for="IdKorisnik" class="form-control" asp-items="ViewBag.Korisnici"></select>
+    </div>
+  <div class="form-group">
+        <label asp-for="Datum">Datum</label>
+        <div><span asp-validation-for="Datum" class="text-danger"></span></div>
+        <input asp-for="Datum" class="form-control" />
+    </div>
+
+
+    <div class="form-group">
+        <label asp-for="UkupanIznos"></label>
+        <div><span asp-validation-for="UkupanIznos" class="text-danger"></span></div>
+        <input asp-for="UkupanIznos" class="form-control" />
+    </div>
+
+</div>
+    <div class="col-sm-12">
+            <partial name="Stavke" model="Model.StavkaRacunas" />
+        </div>
+
+    <div class="text-center">
+        <button class="btn btn-primary" type="submit">Spremi</button>
+        <a asp-action="Index"
+           asp-route-page="@ViewBag.Page"
+           asp-route-sort="@ViewBag.Sort"
+           asp-route-ascending="@ViewBag.Ascending"
+           class="btn btn-secondary">Odustani</a>
+    
+</form>
+
+<partial name="NovaStavkaTemplate" />
+
+    <div>
+        <a asp-action="Index">Back to List</a>
+    </div>
+
+
+ @section styles{
+    <link rel="stylesheet" href="~/lib/jqueryui/themes/base/jquery-ui.css" />
+}
