@@ -3,10 +3,15 @@ using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 
+#nullable disable
+
 namespace Kafic.Models
 {
     public partial class KaficContext : DbContext
     {
+        public KaficContext()
+        {
+        }
 
         public KaficContext(DbContextOptions<KaficContext> options)
             : base(options)
